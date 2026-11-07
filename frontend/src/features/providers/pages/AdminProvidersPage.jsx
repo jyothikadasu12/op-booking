@@ -16,7 +16,7 @@ const AdminProvidersPage = () => {
     try {
       setProviders(await getProviders({ activeOnly: false }));
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load providers.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load providers.");
     }
   };
 
@@ -39,7 +39,7 @@ const AdminProvidersPage = () => {
       setForm({ full_name: "", specialization: "", bio: "", is_active: true });
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to create provider.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to create provider.");
     } finally {
       setSubmitting(false);
     }
@@ -50,7 +50,7 @@ const AdminProvidersPage = () => {
       await updateProviderStatus(provider.id, !provider.is_active);
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to update provider.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to update provider.");
     }
   };
 

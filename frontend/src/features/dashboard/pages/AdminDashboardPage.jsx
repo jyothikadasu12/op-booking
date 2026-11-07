@@ -15,7 +15,7 @@ const AdminDashboardPage = () => {
         const response = await api.get("/admin/dashboard");
         setSummary(response.data?.data ?? null);
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load dashboard.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load dashboard.");
       } finally {
         setLoading(false);
       }

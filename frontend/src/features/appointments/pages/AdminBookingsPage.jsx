@@ -46,7 +46,7 @@ const AdminBookingsPage = () => {
       });
       setStatusDrafts(drafts);
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load bookings.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load bookings.");
     } finally {
       setLoading(false);
     }
@@ -61,7 +61,7 @@ const AdminBookingsPage = () => {
       await updateBookingStatus(bookingId, { status: statusDrafts[bookingId] });
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to update booking status.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to update booking status.");
     }
   };
 

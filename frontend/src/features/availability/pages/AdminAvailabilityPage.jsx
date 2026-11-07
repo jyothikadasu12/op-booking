@@ -33,7 +33,7 @@ const AdminAvailabilityPage = () => {
       setProviders(providerList);
       setSlots(slotList);
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load availability data.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load availability data.");
     }
   };
 
@@ -72,7 +72,7 @@ const AdminAvailabilityPage = () => {
       });
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to create slot.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to create slot.");
     } finally {
       setSubmitting(false);
     }
@@ -83,7 +83,7 @@ const AdminAvailabilityPage = () => {
       await updateSlotStatus(slot.id, !slot.is_active);
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to update slot.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to update slot.");
     }
   };
 

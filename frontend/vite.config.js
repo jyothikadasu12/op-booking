@@ -5,4 +5,10 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/tests/setup.js"],
+    globals: true,
+    exclude: ["**/node_modules/**", "e2e/**"],
+  },
 })

@@ -21,7 +21,7 @@ const AdminServicesPage = () => {
     try {
       setServices(await getServices({ activeOnly: false }));
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load services.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load services.");
     }
   };
 
@@ -42,7 +42,7 @@ const AdminServicesPage = () => {
       setForm({ name: "", description: "", duration_minutes: 30, price: 0, is_active: true });
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to create service.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to create service.");
     } finally {
       setSubmitting(false);
     }
@@ -53,7 +53,7 @@ const AdminServicesPage = () => {
       await updateServiceStatus(service.id, !service.is_active);
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to update status.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to update status.");
     }
   };
 

@@ -24,7 +24,7 @@ const ProfilePage = () => {
           email: profile.email || "",
         });
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load profile.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load profile.");
       } finally {
         setLoading(false);
       }
@@ -41,7 +41,7 @@ const ProfilePage = () => {
       await updateProfile({ full_name: form.full_name, phone: form.phone });
       setMessage("Profile updated successfully.");
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to update profile.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to update profile.");
     } finally {
       setSubmitting(false);
     }

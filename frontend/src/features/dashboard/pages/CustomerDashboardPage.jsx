@@ -20,7 +20,7 @@ const CustomerDashboardPage = () => {
         const data = await getMyBookings({ pageSize: 50 });
         setBookings(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load your appointments.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load your appointments.");
       } finally {
         setLoading(false);
       }

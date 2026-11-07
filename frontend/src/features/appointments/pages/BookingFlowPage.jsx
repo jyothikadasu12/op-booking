@@ -35,7 +35,7 @@ const BookingFlowPage = () => {
         setServices(serviceList);
         setProviders(providerList);
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load booking filters.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load booking filters.");
       } finally {
         setLoadingFilters(false);
       }
@@ -62,7 +62,7 @@ const BookingFlowPage = () => {
         setSlots(data);
         setSelectedSlotId("");
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load available slots.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load available slots.");
       } finally {
         setLoadingSlots(false);
       }
@@ -92,7 +92,7 @@ const BookingFlowPage = () => {
         navigate("/bookings", { replace: true });
       }
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to create booking.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to create booking.");
     } finally {
       setSubmitting(false);
     }

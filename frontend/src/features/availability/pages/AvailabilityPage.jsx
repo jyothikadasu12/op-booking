@@ -23,7 +23,7 @@ const AvailabilityPage = () => {
         setServices(serviceList);
         setProviders(providerList);
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load filters.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load filters.");
       }
     };
     loadFilters();
@@ -40,7 +40,7 @@ const AvailabilityPage = () => {
       });
       setSlots(data);
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load availability.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load availability.");
     } finally {
       setLoading(false);
     }

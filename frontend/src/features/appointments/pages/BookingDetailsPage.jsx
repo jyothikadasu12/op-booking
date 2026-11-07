@@ -34,7 +34,7 @@ const BookingDetailsPage = () => {
         const slotData = await getSlot(bookingData.slot_id);
         setSlot(slotData);
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load booking details.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load booking details.");
       } finally {
         setLoading(false);
       }

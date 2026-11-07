@@ -11,7 +11,7 @@ const ServicesPage = () => {
       try {
         setServices(await getServices());
       } catch (err) {
-        setError(err?.response?.data?.detail || "Unable to load services.");
+        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load services.");
       } finally {
         setLoading(false);
       }

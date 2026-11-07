@@ -59,7 +59,7 @@ const MyBookingsPage = () => {
       );
       setSlotsById(Object.fromEntries(slotEntries));
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load bookings.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load bookings.");
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ const MyBookingsPage = () => {
       setCancelTarget(null);
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to cancel booking.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to cancel booking.");
     } finally {
       setCancelling(false);
     }
@@ -103,7 +103,7 @@ const MyBookingsPage = () => {
       });
       setRescheduleSlots(slots.filter((slot) => slot.id !== booking.slot_id));
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to load alternative slots.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load alternative slots.");
     } finally {
       setRescheduleLoading(false);
     }
@@ -118,7 +118,7 @@ const MyBookingsPage = () => {
       setRescheduleTarget(null);
       await load();
     } catch (err) {
-      setError(err?.response?.data?.detail || "Unable to reschedule booking.");
+      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to reschedule booking.");
     }
   };
 
