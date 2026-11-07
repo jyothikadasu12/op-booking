@@ -10,9 +10,19 @@ from app.schemas.booking import (
     BookingResponse,
     BookingStatusUpdate,
 )
+from app.services.admin_service import AdminService
 from app.services.booking_service import BookingService
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
+
+
+@router.get("/dashboard")
+def admin_dashboard(
+    db: Session = Depends(get_db),
+    _admin: User = Depends(require_admin),
+):
+    service = AdminService(db)
+    return {"success": True, "message": "Admin dashboard summary", "data": service.dashboard_summary()}
 
 
 @router.get("/bookings", response_model=list[BookingResponse])

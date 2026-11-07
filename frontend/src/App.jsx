@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import AdminAvailabilityPage from "./features/availability/pages/AdminAvailabilityPage";
+import AdminBookingsPage from "./features/appointments/pages/AdminBookingsPage";
 import AvailabilityPage from "./features/availability/pages/AvailabilityPage";
 import AdminDashboardPage from "./features/dashboard/pages/AdminDashboardPage";
 import BookingDetailsPage from "./features/appointments/pages/BookingDetailsPage";
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="/admin/services" element={<AdminServicesPage />} />
             <Route path="/admin/providers" element={<AdminProvidersPage />} />
             <Route path="/admin/availability" element={<AdminAvailabilityPage />} />
+            <Route path="/admin/bookings" element={<AdminBookingsPage />} />
           </Route>
 
           <Route path="/" element={<Navigate to="/dashboard" replace />} />

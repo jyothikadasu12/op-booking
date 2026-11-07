@@ -6,6 +6,7 @@ const navItems = [
   { to: "/admin/services", label: "Services" },
   { to: "/admin/providers", label: "Providers" },
   { to: "/admin/availability", label: "Availability" },
+  { to: "/admin/bookings", label: "Bookings" },
 ];
 
 const Sidebar = () => {

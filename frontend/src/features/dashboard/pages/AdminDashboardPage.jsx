@@ -1,25 +1,85 @@
-import { useAuth } from "../../../hooks/useAuth";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import api from "../../../services/api";
+import Card from "../../../components/ui/Card";
+import Spinner from "../../../components/ui/Spinner";
 
 const AdminDashboardPage = () => {
-  const { user, logout } = useAuth();
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await api.get("/admin/dashboard");
+        setSummary(response.data?.data ?? null);
+      } catch (err) {
+        setError(err?.response?.data?.detail || "Unable to load dashboard.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  if (loading) {
+    return <div className="flex min-h-[40vh] items-center justify-center"><Spinner /></div>;
+  }
+
+  const cards = summary
+    ? [
+        ["Total bookings", summary.total_bookings],
+        ["Today's bookings", summary.today_bookings],
+        ["Pending", summary.pending_bookings],
+        ["Confirmed", summary.confirmed_bookings],
+        ["Completed", summary.completed_bookings],
+        ["Cancelled", summary.cancelled_bookings],
+        ["Active services", summary.active_services],
+        ["Active providers", summary.active_providers],
+      ]
+    : [];
 
   return (
-    <div className="min-h-screen bg-background px-6 py-8 text-body">
-      <div className="mx-auto max-w-5xl">
-        <div className="flex items-center justify-between rounded-2xl bg-surface p-6 shadow-sm">
-          <div>
-            <h1 className="text-2xl font-semibold text-heading">Admin Dashboard</h1>
-            <p className="mt-1 text-sm text-muted">
-              Signed in as {user?.full_name || "administrator"}.
-            </p>
-          </div>
-          <button
-            onClick={logout}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
-          >
-            Logout
-          </button>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-semibold text-heading">Admin dashboard</h1>
+        <p className="mt-1 text-sm text-muted">Monitor booking and clinic activity.</p>
+      </div>
+
+      {error && <div className="text-sm text-red-600">{error}</div>}
+
+      <div className="grid gap-4 md:grid-cols-4">
+        {cards.map(([label, value]) => (
+          <Card key={label}>
+            <p className="text-sm text-muted">{label}</p>
+            <p className="mt-2 text-2xl font-semibold text-heading">{value}</p>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card>
+          <h2 className="text-lg font-semibold text-heading">Services</h2>
+          <p className="mt-2 text-sm text-muted">Create and manage clinic services.</p>
+          <Link to="/admin/services" className="mt-4 inline-block text-sm font-medium text-primary">
+            Manage services
+          </Link>
+        </Card>
+        <Card>
+          <h2 className="text-lg font-semibold text-heading">Providers</h2>
+          <p className="mt-2 text-sm text-muted">Manage doctors and service providers.</p>
+          <Link to="/admin/providers" className="mt-4 inline-block text-sm font-medium text-primary">
+            Manage providers
+          </Link>
+        </Card>
+        <Card>
+          <h2 className="text-lg font-semibold text-heading">Availability</h2>
+          <p className="mt-2 text-sm text-muted">Create and control appointment slots.</p>
+          <Link to="/admin/availability" className="mt-4 inline-block text-sm font-medium text-primary">
+            Manage availability
+          </Link>
+        </Card>
       </div>
     </div>
   );
