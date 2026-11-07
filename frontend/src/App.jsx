@@ -3,12 +3,16 @@ import { AuthProvider } from "./context/AuthContext";
 import AdminAvailabilityPage from "./features/availability/pages/AdminAvailabilityPage";
 import AvailabilityPage from "./features/availability/pages/AvailabilityPage";
 import AdminDashboardPage from "./features/dashboard/pages/AdminDashboardPage";
+import BookingDetailsPage from "./features/appointments/pages/BookingDetailsPage";
+import BookingFlowPage from "./features/appointments/pages/BookingFlowPage";
+import MyBookingsPage from "./features/appointments/pages/MyBookingsPage";
 import CustomerDashboardPage from "./features/dashboard/pages/CustomerDashboardPage";
 import LoginPage from "./features/auth/pages/LoginPage";
 import RegisterPage from "./features/auth/pages/RegisterPage";
 import AdminProvidersPage from "./features/providers/pages/AdminProvidersPage";
 import AdminServicesPage from "./features/services/pages/AdminServicesPage";
 import ServicesPage from "./features/services/pages/ServicesPage";
+import ProfilePage from "./features/profile/pages/ProfilePage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import AdminLayout from "./components/layout/AdminLayout";
 import CustomerLayout from "./components/layout/CustomerLayout";
@@ -34,6 +38,10 @@ export default function App() {
             <Route path="/dashboard" element={<CustomerDashboardPage />} />
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/availability" element={<AvailabilityPage />} />
+            <Route path="/book" element={<BookingFlowPage />} />
+            <Route path="/bookings" element={<MyBookingsPage />} />
+            <Route path="/bookings/:id" element={<BookingDetailsPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
           <Route

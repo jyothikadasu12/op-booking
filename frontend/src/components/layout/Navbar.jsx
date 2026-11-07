@@ -23,6 +23,9 @@ const Navbar = () => {
               <Link to="/dashboard" className="hover:text-primary">Dashboard</Link>
               <Link to="/services" className="hover:text-primary">Services</Link>
               <Link to="/availability" className="hover:text-primary">Availability</Link>
+              <Link to="/book" className="hover:text-primary">Book</Link>
+              <Link to="/bookings" className="hover:text-primary">Bookings</Link>
+              <Link to="/profile" className="hover:text-primary">Profile</Link>
             </>
           )}
           {user && isAdmin && <Link to="/admin" className="hover:text-primary">Admin</Link>}
