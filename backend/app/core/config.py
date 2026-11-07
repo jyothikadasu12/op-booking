@@ -17,6 +17,13 @@ class Settings(BaseSettings):
 
     FRONTEND_URL: str = "http://localhost:5173"
 
+    ADMIN_SETUP_SECRET: str = ""
+
+    REFRESH_TOKEN_COOKIE_NAME: str = "refresh_token"
+    COOKIE_SECURE: bool = False
+    COOKIE_SAMESITE: str = "lax"
+    COOKIE_PATH: str = "/api/v1/auth"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

@@ -13,3 +13,12 @@ SessionLocal = sessionmaker(
     autoflush=False,
     bind=engine,
 )
+
+
+def get_db():
+    """Provide a transactional database session to request handlers."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
