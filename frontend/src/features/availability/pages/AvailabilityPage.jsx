@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAvailability } from "../services/availabilityApi";
 import { getServices } from "../../services/services/serviceApi";
 import { getProviders } from "../../providers/services/providerApi";
-
+import { useNavigate } from "react-router-dom";
 const AvailabilityPage = () => {
   const [services, setServices] = useState([]);
   const [providers, setProviders] = useState([]);
@@ -12,7 +12,7 @@ const AvailabilityPage = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   useEffect(() => {
     const loadFilters = async () => {
       try {
@@ -40,8 +40,8 @@ const AvailabilityPage = () => {
       });
       setSlots(data);
     } catch (err) {
-      setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load availability.");
-    } finally {
+  setError(err.message || "Unable to load availability.");
+} finally {
       setLoading(false);
     }
   };
@@ -86,26 +86,59 @@ const AvailabilityPage = () => {
           />
 
           <button
-            onClick={fetchSlots}
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
-          >
-            Search
-          </button>
+  type="button"
+  onClick={fetchSlots}
+  className="rounded-lg border border-blue-600 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:border-blue-700 hover:bg-white-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+>
+  Search
+</button>
         </div>
 
         {error && <div className="mt-4 text-sm text-red-600">{error}</div>}
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {slots.map((slot) => (
-            <div key={slot.id} className="rounded-2xl bg-surface p-6 shadow-sm">
-              <div className="text-sm text-muted">Slot #{slot.id}</div>
-              <div className="mt-2 text-heading">Start: {new Date(slot.start_time).toLocaleString()}</div>
-              <div className="text-body">End: {new Date(slot.end_time).toLocaleString()}</div>
-              <div className="mt-2 text-sm text-muted">
-                Capacity: {slot.capacity} remaining
-              </div>
-            </div>
-          ))}
+  <div
+    key={slot.id}
+    className="rounded-2xl bg-surface p-6 shadow-sm"
+  >
+    <div className="text-sm text-muted">
+      Slot #{slot.id}
+    </div>
+
+    <div className="mt-2 text-heading">
+      Start: {new Date(slot.start_time).toLocaleString()}
+    </div>
+
+    <div className="text-body">
+      End: {new Date(slot.end_time).toLocaleString()}
+    </div>
+
+    <div className="mt-2 text-sm text-muted">
+      Capacity: {slot.capacity}
+    </div>
+
+    <button
+  type="button"
+  onClick={() => navigate("/book", { state: { slot } })}
+  style={{
+    display: "block",
+    width: "100%",
+    marginTop: "20px",
+    padding: "12px",
+    backgroundColor: "#2563eb",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "15px",
+    fontWeight: "600",
+    cursor: "pointer",
+  }}
+>
+  Book Appointment
+</button>
+  </div>
+))}
           {!loading && slots.length === 0 && (
             <p className="text-sm text-muted">No slots found. Adjust the filters and search.</p>
           )}

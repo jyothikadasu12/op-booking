@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+
 import {
   getCurrentUser,
   loginUser,
@@ -9,9 +17,14 @@ import {
 
 const AuthContext = createContext(null);
 
+// Supports both direct API responses and { success, data: ... } responses.
+const unwrapData = (response) => response?.data ?? response;
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [accessToken, setAccessToken] = useState(() => localStorage.getItem("access_token"));
+  const [accessToken, setAccessToken] = useState(
+    () => localStorage.getItem("access_token")
+  );
   const [loading, setLoading] = useState(true);
 
   const clearSession = useCallback(() => {
@@ -22,67 +35,84 @@ export const AuthProvider = ({ children }) => {
 
   const applyUser = useCallback(async (token) => {
     if (!token) {
-      setUser(null);
-      return;
+      throw new Error("Access token is missing.");
     }
+
     localStorage.setItem("access_token", token);
     setAccessToken(token);
-    const currentUser = await getCurrentUser();
+
+    const response = await getCurrentUser();
+    const currentUser = unwrapData(response);
+
     setUser(currentUser);
+    return currentUser;
   }, []);
 
   const bootstrap = useCallback(async () => {
     try {
-      if (accessToken) {
+      const storedToken = localStorage.getItem("access_token");
+
+      if (storedToken) {
         try {
-          const currentUser = await getCurrentUser();
-          setUser(currentUser);
+          const response = await getCurrentUser();
+          setUser(unwrapData(response));
+          return;
         } catch {
-          // Access token may be expired; try refresh cookie.
-          const refreshed = await refreshSession();
-          await applyUser(refreshed?.data?.access_token);
-        }
-      } else {
-        try {
-          const refreshed = await refreshSession();
-          await applyUser(refreshed?.data?.access_token);
-        } catch {
-          clearSession();
+          // Access token may have expired. Try refreshing it.
         }
       }
-    } catch {
+
+      const refreshResponse = await refreshSession();
+      const refreshedData = unwrapData(refreshResponse);
+
+      await applyUser(refreshedData?.access_token);
+    } catch (error) {
       clearSession();
     } finally {
       setLoading(false);
     }
-  }, [accessToken, applyUser, clearSession]);
+  }, [applyUser, clearSession]);
 
   useEffect(() => {
     bootstrap();
   }, [bootstrap]);
 
-  const login = useCallback(async (email, password) => {
-    const response = await loginUser({ email, password });
-    const token = response?.data?.access_token;
-    if (!token) {
-      throw new Error("Login did not return an access token");
-    }
-    await applyUser(token);
-    return response?.data?.user;
-  }, [applyUser]);
+  const login = useCallback(
+    async (email, password) => {
+      const response = await loginUser({ email, password });
+      const loginData = unwrapData(response);
 
-  const register = useCallback(async (payload) => {
-    const response = await registerUser(payload);
-    // Registration does not return a token; log in immediately afterward.
-    const user = await login(payload.email, payload.password);
-    return user ?? response?.data?.user;
-  }, [login]);
+      const token = loginData?.access_token;
+
+      if (!token) {
+        throw new Error("Login did not return an access token.");
+      }
+
+      await applyUser(token);
+
+      return loginData?.user;
+    },
+    [applyUser]
+  );
+
+  const register = useCallback(
+    async (payload) => {
+      const response = await registerUser(payload);
+      const registrationData = unwrapData(response);
+
+      const loggedInUser = await login(
+        payload.email,
+        payload.password
+      );
+
+      return loggedInUser ?? registrationData?.user;
+    },
+    [login]
+  );
 
   const logout = useCallback(async () => {
     try {
       await logoutUser();
-    } catch (error) {
-      // Local cleanup still matters even if server logout fails.
     } finally {
       clearSession();
     }
@@ -99,13 +129,19 @@ export const AuthProvider = ({ children }) => {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be used inside AuthProvider");
   }
+
   return context;
 };

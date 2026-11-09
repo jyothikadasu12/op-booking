@@ -1,4 +1,4 @@
-import api from "../../../services/api";
+import api from "../../../services/apiClient";
 
 export const getProviders = async ({ activeOnly = true, search } = {}) => {
   const response = await api.get("/providers", { params: { active_only: activeOnly, search } });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import api from "../../../services/api";
+import api from "../../../services/apiClient";
 import Card from "../../../components/ui/Card";
 import Spinner from "../../../components/ui/Spinner";
 
@@ -15,7 +15,7 @@ const AdminDashboardPage = () => {
         const response = await api.get("/admin/dashboard");
         setSummary(response.data?.data ?? null);
       } catch (err) {
-        setError(err?.response?.data?.message || err?.response?.data?.detail || "Unable to load dashboard.");
+        setError(err.message || "Unable to load dashboard.");
       } finally {
         setLoading(false);
       }

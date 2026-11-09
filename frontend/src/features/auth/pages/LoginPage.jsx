@@ -17,11 +17,11 @@ const LoginPage = () => {
     try {
       const user = await login(email, password);
       navigate(user?.role === "admin" ? "/admin" : "/dashboard", { replace: true });
-    } catch (err) {
-      setError(err?.response?.data?.message || "Unable to log in. Check your credentials.");
-    } finally {
-      setSubmitting(false);
-    }
+   } catch (err) {
+  setError(err.message || "Unable to log in. Please try again.");
+} finally {
+  setSubmitting(false);
+}
   };
 
   return (
@@ -70,7 +70,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark disabled:opacity-60"
+            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {submitting ? "Logging in..." : "Log in"}
           </button>

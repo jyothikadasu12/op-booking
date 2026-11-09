@@ -1,4 +1,4 @@
-import api from "../../../services/api";
+import api from "../../../services/apiClient";
 
 export const createBooking = async (payload) => {
   const response = await api.post("/bookings", payload);

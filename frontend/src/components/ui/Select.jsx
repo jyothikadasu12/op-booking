@@ -1,32 +1,29 @@
+
 const Select = ({
   label,
   error,
-  required = false,
-  className = "",
-  id,
   children,
+  className = "",
   ...props
 }) => {
-  const selectId = id || props.name;
-
   return (
-    <div className={`space-y-1 ${className}`}>
+    <div className="w-full space-y-1.5">
       {label && (
-        <label htmlFor={selectId} className="block text-sm font-medium text-body">
+        <label className="block text-sm font-medium text-body">
           {label}
-          {required && <span className="ml-1 text-red-500">*</span>}
         </label>
       )}
+
       <select
-        id={selectId}
-        className={`w-full rounded-lg border bg-white px-3 py-2 text-body outline-none transition ${
-          error ? "border-red-400 focus:border-red-500" : "border-border focus:border-primary"
-        }`}
         {...props}
+        className={`w-full rounded-lg border border-border bg-white px-4 py-3 text-sm text-heading outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${className}`}
       >
         {children}
       </select>
-      {error && <p className="text-sm text-red-600">{error}</p>}
+
+      {error && (
+        <p className="text-xs text-red-600">{error}</p>
+      )}
     </div>
   );
 };
