@@ -40,3 +40,4 @@ test-results/
 
 # Alembic
 # (keep migrations, but ignore any local cache if added later)
+.opencoderules/ 
